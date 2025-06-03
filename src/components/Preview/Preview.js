@@ -1,0 +1,29 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Media from '../Media/Media';
+import ShowScriptButton from '../ShowScriptButton/ShowScriptButton';
+
+const Preview = ({ Name, Description, Image, CodeName }) => (
+   <div className="flex flex-col items-center mb-4 bg-white/30 p-4 rounded-xl w-1/2 mx-auto border-t-4 border-b-4 border-white">
+      <h3 className="text-xl font-bold">{Name}</h3>
+      <Media src={Image} alt={Name} className="w-64 h-auto rounded-md my-2" />
+      <p className="text-md font-semibold">{Description}</p>
+      <ShowScriptButton previewCodePath={`/code/${CodeName}.lua`} />
+  </div>
+);
+
+
+Preview.propTypes = {
+  Name: PropTypes.string.isRequired,
+  Description: PropTypes.string.isRequired,
+  Image: PropTypes.string.isRequired,
+  CodeName:PropTypes.string.isRequired
+};
+
+Preview.defaultProps = {
+  Name: "Default Name",
+  Description: "Default Description",
+  Image: "../../public/defaultImage.jpg",
+};
+
+export default Preview;
