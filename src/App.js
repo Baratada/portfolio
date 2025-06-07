@@ -1,28 +1,29 @@
 import './App.css';
-import Preview from './components/Preview/Preview';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import Scripts from './pages/Scripts';
+import Projects from './pages/Projects';
 
 function App() {
   return (
-<div className="App">
-      <h1 className="text-3xl font-bold text-center mt-5">Welcome!</h1>
-      <br/>
-      <p className='font-bold w-1/2 mx-auto bg-white/30 rounded-md'>I'm Marko, a roblox developer. I've been developing for 3 years, and in those 3 years i've made plenty of scripts. These are some of the scripts I think would be able to show my experience with Roblox and the Luau language the best.</p>
-      <br/>
-      <Preview
-        Name="Dumbass cat"
-        Description="This is a dumbass cat."
-        Image="/defaultImage.jpg"
-        CodeName="skinCheckerScript"
-      />
-      <Preview
-        Name="Funny rat"
-        Description="This is a funny rat."
-        Image="/funnyRat.gif"
-        CodeName="skinCheckerScript"
-      />
-    </div>
+    <Router> {/* Important for GitHub Pages */}
+      <div className="App">
+        {/* Navigation */}
+        <nav className="flex gap-4 justify-center py-4 bg-white/20 shadow-md">
+          <Link to="/" className="text-blue-500 font-bold hover:underline transition hover:text-blue-300">Home</Link>
+          <Link to="/scripts" className="text-blue-500 font-bold hover:underline transition hover:text-blue-300">Scripts</Link>
+          <Link to="/projects" className="text-blue-500 font-bold hover:underline transition hover:text-blue-300">Projects</Link>
+        </nav>
+
+        {/* Routes */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/scripts" element={<Scripts />} />
+          <Route path="/projects" element={<Projects />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
-
 
 export default App;

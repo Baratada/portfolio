@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { motion, AnimatePresence } from 'framer-motion';
 
-const ShowScriptButton = ({ previewCodePath }) => {
+const ShowScriptButton = ({ previewCodeFolderPath, scriptFiles }) => {
   const [code, setCode] = useState('');
+  const [activeTab, setActiveTab] = useState(scriptFiles?.[0] || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [visible, setVisible] = useState(false);
 
-  const showCode = () => {
-    setVisible(true);
+  const fetchCode = (filename) => {
+    setLoading(true);
     setError(null);
     setCode('');
-    setLoading(true);
-
-    fetch(previewCodePath)
+    fetch(`${previewCodeFolderPath}/${filename}`)
       .then(res => {
-        if (!res.ok) throw new Error(`Failed to fetch ${previewCodePath}`);
+        if (!res.ok) throw new Error(`Failed to fetch ${filename}`);
         return res.text();
       })
       .then(text => {
@@ -30,15 +29,22 @@ const ShowScriptButton = ({ previewCodePath }) => {
       });
   };
 
+  const showCode = () => {
+    setVisible(true);
+    fetchCode(activeTab);
+    document.body.style.overflow = 'hidden'; // Lock scroll
+  };
+
   const closeCode = () => {
     setVisible(false);
     setCode('');
+    document.body.style.overflow = ''; // Unlock scroll
   };
 
   return (
-    <div>
+    <div className="mt-4">
       <button
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        className="px-4 py-2 bg-white/10 text-white rounded transition hover:bg-white/35"
         onClick={showCode}
       >
         Show Code
@@ -47,13 +53,7 @@ const ShowScriptButton = ({ previewCodePath }) => {
       <AnimatePresence>
         {visible && (
           <div
-            style={{
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              zIndex: 9999,
-            }}
+            className="fixed top-1/2 left-1/2 z-[9999] -translate-x-1/2 -translate-y-1/2 bg-[#1e1e1e] pt-20"
           >
             <motion.div
               key="code-window"
@@ -61,34 +61,38 @@ const ShowScriptButton = ({ previewCodePath }) => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              style={{
-                backgroundColor: '#1e1e1e',
-                padding: '1rem',
-                borderRadius: '8px',
-                maxWidth: '90vw',
-                maxHeight: '80vh',
-                overflowY: 'auto',
-                boxShadow: '0 0 15px rgba(0,0,0,0.7)',
-                position: 'relative',
-              }}
+              className="relative bg-[#1e1e1e] p-4 rounded-lg max-w-[90vw] max-h-[80vh] overflow-y-auto shadow-[0_0_15px_rgba(0,0,0,0.7)]"
             >
-              <button
-                onClick={closeCode}
-                style={{
-                  position: 'absolute',
-                  top: '0.5rem',
-                  right: '0.75rem',
-                  fontSize: '1.25rem',
-                  fontWeight: 'bold',
-                  color: 'white',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                }}
-                aria-label="Close"
-              >
-                ×
-              </button>
+              <div className="sticky top-0 bg-[#1e1e1e] z-10 pb-2">
+                <button
+                  onClick={closeCode}
+                  aria-label="Close"
+                  className="absolute top-2 right-3 text-white text-xl font-bold bg-none border-none cursor-pointer"
+                >
+                  ×
+                </button>
+
+                {/* Tabs */}
+                <div className="flex space-x-2 mb-2">
+                  {scriptFiles.map(file => (
+                    <button
+                      key={file}
+                      className={`px-2 py-1 rounded text-sm font-mono ${
+                        activeTab === file
+                          ? 'bg-white/25 text-white'
+                          : 'bg-white/10 text-gray-300'
+                      }`}
+                      onClick={() => {
+                        if (file === activeTab) return;
+                        setActiveTab(file);
+                        fetchCode(file);
+                      }}
+                    >
+                      {file}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
               {loading && <p className="text-white">Loading code...</p>}
               {error && <p className="text-red-500">Error: {error}</p>}
