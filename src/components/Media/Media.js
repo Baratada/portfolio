@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const Media = ({ src, alt = "", className = "" }) => {
   const isVideo = src.match(/\.(mp4|webm|ogg)$/i);
@@ -6,19 +6,19 @@ const Media = ({ src, alt = "", className = "" }) => {
 
   if (isVideo) {
     return (
-      <video
-        src={src}
-        className={className}
-        controls
-        autoPlay
-        muted
-        loop
-      />
+      <video src={src} className={className} controls autoPlay muted loop />
     );
   }
 
   if (isImage) {
-    return <img src={src} alt={alt} className={className} />;
+    return (
+      <img
+        src={src}
+        alt={alt}
+        className={`${className} transform transition duration-300 active:scale-[4]`}
+        style={{ Hover: "" }}
+      />
+    );
   }
 
   return <p className="text-red-500">Unsupported media type: {src}</p>;

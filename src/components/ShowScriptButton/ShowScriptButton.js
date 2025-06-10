@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import React, { useState } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from "framer-motion";
 
 const ShowScriptButton = ({ previewCodeFolderPath, scriptFiles }) => {
-  const [code, setCode] = useState('');
-  const [activeTab, setActiveTab] = useState(scriptFiles?.[0] || '');
+  const [code, setCode] = useState("");
+  const [activeTab, setActiveTab] = useState(scriptFiles?.[0] || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -13,17 +13,17 @@ const ShowScriptButton = ({ previewCodeFolderPath, scriptFiles }) => {
   const fetchCode = (filename) => {
     setLoading(true);
     setError(null);
-    setCode('');
+    setCode("");
     fetch(`${previewCodeFolderPath}/${filename}`)
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error(`Failed to fetch ${filename}`);
         return res.text();
       })
-      .then(text => {
+      .then((text) => {
         setCode(text);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         setError(err.message);
         setLoading(false);
       });
@@ -32,13 +32,13 @@ const ShowScriptButton = ({ previewCodeFolderPath, scriptFiles }) => {
   const showCode = () => {
     setVisible(true);
     fetchCode(activeTab);
-    document.body.style.overflow = 'hidden'; // Lock scroll
+    document.body.style.overflow = "hidden";
   };
 
   const closeCode = () => {
     setVisible(false);
-    setCode('');
-    document.body.style.overflow = ''; // Unlock scroll
+    setCode("");
+    document.body.style.overflow = "";
   };
 
   return (
@@ -52,35 +52,32 @@ const ShowScriptButton = ({ previewCodeFolderPath, scriptFiles }) => {
 
       <AnimatePresence>
         {visible && (
-          <div
-            className="fixed top-1/2 left-1/2 z-[9999] -translate-x-1/2 -translate-y-1/2 bg-[#1e1e1e] pt-20"
-          >
+          <div className="fixed top-1/2 left-1/2 z-[9999] -translate-x-1/2 -translate-y-1/2 bg-[#1e1e1e] pt-20">
             <motion.div
               key="code-window"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.5 }}
               className="relative bg-[#1e1e1e] p-4 rounded-lg max-w-[90vw] max-h-[80vh] overflow-y-auto shadow-[0_0_15px_rgba(0,0,0,0.7)]"
             >
-              <div className="sticky top-0 bg-[#1e1e1e] z-10 pb-2">
+              <div className="sticky top-[-20px] bg-[#1e1e1e] z-10 p-2">
                 <button
                   onClick={closeCode}
                   aria-label="Close"
-                  className="absolute top-2 right-3 text-white text-xl font-bold bg-none border-none cursor-pointer"
+                  className="absolute top-1 right-[-10px] text-white text-xl font-bold bg-none border-none cursor-pointer"
                 >
                   ×
                 </button>
 
-                {/* Tabs */}
                 <div className="flex space-x-2 mb-2">
-                  {scriptFiles.map(file => (
+                  {scriptFiles.map((file) => (
                     <button
                       key={file}
                       className={`px-2 py-1 rounded text-sm font-mono ${
                         activeTab === file
-                          ? 'bg-white/25 text-white'
-                          : 'bg-white/10 text-gray-300'
+                          ? "bg-white/25 text-white"
+                          : "bg-white/10 text-gray-300"
                       }`}
                       onClick={() => {
                         if (file === activeTab) return;
