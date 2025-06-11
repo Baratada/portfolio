@@ -6,7 +6,14 @@ const Media = ({ src, alt = "", className = "" }) => {
 
   if (isVideo) {
     return (
-      <video src={src} className={className} controls autoPlay muted loop />
+      <video
+        src={src}
+        className={`${className} shadow-[0_0_10px_#000]`}
+        controls
+        autoPlay
+        muted
+        loop
+      />
     );
   }
 
@@ -15,7 +22,7 @@ const Media = ({ src, alt = "", className = "" }) => {
       <img
         src={src}
         alt={alt}
-        className={`${className} transform transition duration-300 active:scale-[4]`}
+        className={`${className} transform transition duration-300 active:scale-[4] shadow-[0_0_10px_#000]`}
         style={{ Hover: "" }}
       />
     );

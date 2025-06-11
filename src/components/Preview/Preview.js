@@ -4,7 +4,7 @@ import Media from "../Media/Media";
 import ShowScriptButton from "../ShowScriptButton/ShowScriptButton";
 
 const Preview = ({ Name, Description, Image, CodeName, scriptFiles }) => (
-  <div className="flex flex-col items-center mb-4 bg-white/30 p-4 rounded-xl w-1/2 mx-auto border-t-4 border-b-4 border-white/30 shadow-xl/30">
+  <div className="flex flex-col items-center mb-4 bg-white/30 p-4 rounded-xl w-1/2 mx-auto border-t-4 border-b-4 border-white/30 shadow-[0_0_10px_#000]">
     <h3 className="text-xl font-bold">{Name}</h3>
     <Media
       src={process.env.PUBLIC_URL + "/media/" + Image}
