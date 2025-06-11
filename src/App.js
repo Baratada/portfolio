@@ -9,7 +9,14 @@ function App() {
     <Router>
       {" "}
       {/* Important for GitHub Pages */}
-      <div className="App">
+      <div
+        style={{
+          backgroundImage: `url(${process.env.PUBLIC_URL}/media/Background.png)`,
+          backgroundSize: "cover",
+        }}
+        className="App h-screen"
+      >
+        {" "}
         {/* Navigation */}
         <nav className="flex gap-4 justify-center py-4 bg-white/20 shadow-md">
           <Link
@@ -37,7 +44,6 @@ function App() {
             Source
           </a>
         </nav>
-
         {/* Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
