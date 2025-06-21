@@ -1,34 +1,37 @@
 import React from "react";
 
-const Media = ({ src, alt = "", className = "" }) => {
+const Media = ({ src, alt = "", className = "", text }) => {
   const isVideo = src.match(/\.(mp4|webm|ogg)$/i);
   const isImage = src.match(/\.(jpeg|jpg|png|gif|svg)$/i);
 
-  if (isVideo) {
-    return (
-      <video
-        src={src}
-        className={`${className} shadow-[0_0_10px_#000]`}
-        controls
-        autoPlay
-        muted
-        loop
-      />
-    );
-  }
+  const mediaClass = `${className} shadow-[0_0_10px_#000]`;
 
-  if (isImage) {
-    return (
-      <img
-        src={src}
-        alt={alt}
-        className={`${className} transform transition duration-300 active:scale-[4] shadow-[0_0_10px_#000]`}
-        style={{ Hover: "" }}
-      />
-    );
-  }
+  const renderMedia = () => {
+    if (isVideo) {
+      return (
+        <video src={src} className={mediaClass} controls autoPlay muted loop />
+      );
+    }
 
-  return <p className="text-red-500">Unsupported media type: {src}</p>;
+    if (isImage) {
+      return (
+        <img
+          src={src}
+          alt={alt}
+          className={`${mediaClass} transform transition duration-300 active:scale-[4]`}
+        />
+      );
+    }
+
+    return <p className="text-red-500">Unsupported media type: {src}</p>;
+  };
+
+  return (
+    <div className="flex flex-col items-center space-y-2 font-bold">
+      {renderMedia()}
+      {text && <p className="text-white text-sm">{text}</p>}
+    </div>
+  );
 };
 
 export default Media;

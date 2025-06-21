@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Home from "./pages/Home";
 import Scripts from "./pages/Scripts";
 import Projects from "./pages/Projects";
+import Animations from "./pages/Animations";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -40,6 +41,19 @@ function AnimatedRoutes() {
               transition={{ duration: 0.4 }}
             >
               <Scripts />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/animations"
+          element={
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
+            >
+              <Animations />
             </motion.div>
           }
         />
@@ -83,6 +97,12 @@ function App() {
             className="text-blue-500 font-bold hover:underline transition hover:text-blue-300"
           >
             Scripts
+          </Link>
+          <Link
+            to="/animations"
+            className="text-blue-500 font-bold hover:underline transition hover:text-blue-300"
+          >
+            Animations
           </Link>
           <Link
             to="/projects"

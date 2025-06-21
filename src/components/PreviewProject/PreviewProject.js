@@ -7,7 +7,7 @@ const PreviewProject = ({ Name, Description, Image }) => (
     <Media
       src={process.env.PUBLIC_URL + "/media/" + Image}
       alt={Name}
-      className="w-64 h-auto rounded-md my-2"
+      className="w-128 h-auto rounded-md my-2"
     />
 
     <div className="flex flex-col justify-center shadow-xl-100">
