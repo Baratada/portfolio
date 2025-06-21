@@ -7,7 +7,7 @@ const Animations = () => (
       All of my animations are made with blender, then imported into Moon
       Animator for some final touchups.
     </p>
-    <div className="flex items-center justify-center gap-6 my-4">
+    <div className="grid grid-cols-3 gap-2 mt-5">
       <Media
         src={process.env.PUBLIC_URL + "/media/BatSwinging.mp4"}
         alt="oopsie"
@@ -31,6 +31,12 @@ const Animations = () => (
         alt="oopsie"
         className="w-[400px] h-auto rounded-md my-2"
         text={"Heavy Weapon Run"}
+      />
+      <Media
+        src={process.env.PUBLIC_URL + "/media/RunAnimation.mp4"}
+        alt="oopsie"
+        className="w-[400px] h-auto rounded-md my-2"
+        text={"Run"}
       />
     </div>
   </div>
