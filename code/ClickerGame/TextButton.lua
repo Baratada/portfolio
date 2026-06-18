@@ -13,11 +13,10 @@ local function TextButton(
 		BG: UsedAs<Color3>,
 		FG: UsedAs<Color3>,
 		Rotation: UsedAs<number?>,
-		Activated: UsedAs<() -> ()>
+		Activated: UsedAs<() -> ()>,
 	}
 )
-	
-	return scope:New "TextButton" {
+	return scope:New("TextButton")({
 		BackgroundColor3 = props.BG,
 		TextColor3 = props.FG,
 		AnchorPoint = Vector2.new(0.5, 0.5),
@@ -28,31 +27,34 @@ local function TextButton(
 		Font = Enum.Font.BuilderSansExtraBold,
 		Text = props.Text,
 		Rotation = props.Rotation or 0,
-		
-		[OnEvent "Activated"] = function()
+
+		[OnEvent("Activated")] = function()
 			if props.Activated then
 				props.Activated()
 			end
 		end,
-		
+
 		[Children] = {
-			scope:New "UIGradient" {
-				Offset = Vector2.new(0,.1),
+			scope:New("UIGradient")({
+				Offset = Vector2.new(0, 0.1),
 				Rotation = 90,
-				Color = ColorSequence.new({ColorSequenceKeypoint.new(0, peek(props.BG)), ColorSequenceKeypoint.new(1, peek(props.FG))})
-			},
-			scope:New "UICorner" {},
-			scope:New "UIStroke" {
+				Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, peek(props.BG)),
+					ColorSequenceKeypoint.new(1, peek(props.FG)),
+				}),
+			}),
+			scope:New("UICorner")({}),
+			scope:New("UIStroke")({
 				Thickness = 2,
-				Color = props.BG
-			},
-			scope:New "UIStroke"{
+				Color = props.BG,
+			}),
+			scope:New("UIStroke")({
 				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 				Transparency = 0.5,
-				Color = props.FG
-			}
-		}
-	}
+				Color = props.FG,
+			}),
+		},
+	})
 end
 
 return TextButton
