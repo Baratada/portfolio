@@ -13,19 +13,19 @@ local cooldownUpdateEvent = replicatedStorage.Remotes.CooldownUpdate :: RemoteEv
 
 local GRAVITY = workspace.Gravity
 
-local lastCast : {[Player]: {[string]: number}} = {}
-local hitboxes : {[number]: Types.Hitbox} = {}
+local lastCast: { [Player]: { [string]: number } } = {}
+local hitboxes: { [number]: Types.Hitbox } = {}
 
-local elementSettings : { [string]: elementSettings.ElementData } = require(ReplicatedStorage.Modules.ElementSettings) -- An external module script with element settings
+local elementSettings: { [string]: elementSettings.ElementData } = require(ReplicatedStorage.Modules.ElementSettings) -- An external module script with element settings
 local ELEMENTS = {}
 
-local NPCs : {Instance} = workspace.NPCs:GetChildren()
+local NPCs: { Instance } = workspace.NPCs:GetChildren()
 
 local function getGroundPlacementCFrame(position: Vector3, excludePart: BasePart?)
 	local params = RaycastParams.new()
 	params.FilterType = Enum.RaycastFilterType.Exclude
-	
-	local ignoreList : {Instance} = NPCs
+
+	local ignoreList: { Instance } = NPCs
 	-- Filter out NPCs, players, and the ball itself
 	for _, player in ipairs(Players:GetPlayers()) do
 		if player.Character then
@@ -64,16 +64,10 @@ local function getGroundPlacementCFrame(position: Vector3, excludePart: BasePart
 	local forwardVector = upVector:Cross(rightVector).Unit
 	rightVector = forwardVector:Cross(upVector).Unit
 
-	local surfaceCFrame = CFrame.fromMatrix(
-		groundPosition + upVector * 0.05,
-		rightVector,
-		upVector,
-		forwardVector
-	)
-	
+	local surfaceCFrame = CFrame.fromMatrix(groundPosition + upVector * 0.05, rightVector, upVector, forwardVector)
+
 	return surfaceCFrame
 end
-
 
 local function rotateToNegative90(cf: CFrame)
 	-- Get current rotation angles
@@ -109,7 +103,13 @@ local function spawnSound(soundId: string, position: Vector3)
 	end)
 end
 
-local function spawnDebrisParts(center: Vector3, radius: number, partCount: number, lifetime: number, baseCFrame: CFrame?)
+local function spawnDebrisParts(
+	center: Vector3,
+	radius: number,
+	partCount: number,
+	lifetime: number,
+	baseCFrame: CFrame?
+)
 	spawnSound("rbxassetid://3923230963", center)
 
 	for i = 1, partCount do
@@ -138,7 +138,8 @@ local function spawnDebrisParts(center: Vector3, radius: number, partCount: numb
 		end
 
 		local targetPosition = position + Vector3.new(0, math.random(1, 3), 0)
-		local tweenInfo = TweenInfo.new(0.4 + math.random() * 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, 1, true)
+		local tweenInfo =
+			TweenInfo.new(0.4 + math.random() * 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, 1, true)
 		local tween = TweenService:Create(part, tweenInfo, { Position = targetPosition })
 		tween:Play()
 
@@ -167,7 +168,10 @@ local function fadeEmittersToTransparent(zone: Instance, duration: number)
 
 					for _, keypoint in ipairs(startSequence.Keypoints) do
 						local fadedValue = keypoint.Value + (1 - keypoint.Value) * alpha
-						table.insert(newKeypoints, NumberSequenceKeypoint.new(keypoint.Time, fadedValue, keypoint.Envelope))
+						table.insert(
+							newKeypoints,
+							NumberSequenceKeypoint.new(keypoint.Time, fadedValue, keypoint.Envelope)
+						)
 					end
 
 					emitter.Transparency = NumberSequence.new(newKeypoints)
@@ -178,13 +182,19 @@ local function fadeEmittersToTransparent(zone: Instance, duration: number)
 	end
 end
 
-local function placeZone(position : Vector3?, cframe : CFrame?, element : string, elementConfig : { [string]: any }, character : Model)
-	local zoneTemplate = ReplicatedStorage.Models
-		:FindFirstChild(element.."Attack")
-		:FindFirstChild(element.."Zone")
-	if not zoneTemplate then return end
+local function placeZone(
+	position: Vector3?,
+	cframe: CFrame?,
+	element: string,
+	elementConfig: { [string]: any },
+	character: Model
+)
+	local zoneTemplate = ReplicatedStorage.Models:FindFirstChild(element .. "Attack"):FindFirstChild(element .. "Zone")
+	if not zoneTemplate then
+		return
+	end
 
-	local zone : BasePart = zoneTemplate:Clone() :: BasePart
+	local zone: BasePart = zoneTemplate:Clone() :: BasePart
 	zone.Anchored = true
 	zone.CanCollide = false
 	zone.Parent = workspace
@@ -199,7 +209,13 @@ local function placeZone(position : Vector3?, cframe : CFrame?, element : string
 	spawnSound(elementConfig.Sound, zone.Position)
 
 	if elementConfig.Debris then
-		spawnDebrisParts(zone.CFrame.Position, zone.Size.X * 20, 60, elementConfig.Duration, rotateToNegative90(zone.CFrame))
+		spawnDebrisParts(
+			zone.CFrame.Position,
+			zone.Size.X * 20,
+			60,
+			elementConfig.Duration,
+			rotateToNegative90(zone.CFrame)
+		)
 	end
 
 	task.delay(elementConfig.Duration - 1, function()
@@ -215,14 +231,14 @@ local function placeZone(position : Vector3?, cframe : CFrame?, element : string
 				instance:Emit(instance:GetAttribute("EmitCount"))
 			end
 		end
-		
+
 		hitboxes[now] = Hitbox.CreateHitbox()
 		hitboxes[now].Size = zone.Size
 		hitboxes[now].CFrame = zone.CFrame
 		hitboxes[now].Visualizer = false
 		hitboxes[now].Parent = workspace
 
-		hitboxes[now].Touched:Connect(function(hit : BasePart, humanoid : Humanoid?)
+		hitboxes[now].Touched:Connect(function(hit: BasePart, humanoid: Humanoid?)
 			if humanoid and humanoid:IsA("Humanoid") and humanoid.Parent ~= character then
 				humanoid:TakeDamage(elementConfig.Damage)
 				spawnSound("rbxassetid://137171473068941", hit.Position)
@@ -234,20 +250,24 @@ local function placeZone(position : Vector3?, cframe : CFrame?, element : string
 		hitboxes[now]:Destroy()
 	end
 end
-local function throwBall(character: Model, hrp: BasePart, targetPos: Vector3, element: string, elementConfig: { [string]: any })
+local function throwBall(
+	character: Model,
+	hrp: BasePart,
+	targetPos: Vector3,
+	element: string,
+	elementConfig: { [string]: any }
+)
 	local origin = hrp.Position
 	local gravityVec = Vector3.new(0, -workspace.Gravity, 0)
 	local flightTime = elementConfig.FlightTime
 	local displacement = targetPos - origin
 
 	-- Compute initial velocity
-	local v0 = (displacement - 0.5 * gravityVec * (flightTime^2)) / flightTime
+	local v0 = (displacement - 0.5 * gravityVec * (flightTime ^ 2)) / flightTime
 
 	-- Spawn the ball
-	local ball = ReplicatedStorage.Models
-		:FindFirstChild(element.."Attack")
-		:FindFirstChild(element.."Ball")
-		:Clone() :: BasePart
+	local ball =
+		ReplicatedStorage.Models:FindFirstChild(element .. "Attack"):FindFirstChild(element .. "Ball"):Clone() :: BasePart
 	ball.CFrame = CFrame.new(origin)
 	ball.Parent = workspace
 	RunService.Heartbeat:Wait()
@@ -259,7 +279,7 @@ local function throwBall(character: Model, hrp: BasePart, targetPos: Vector3, el
 
 	local lastPosition = origin
 
-	local conn : RBXScriptConnection
+	local conn: RBXScriptConnection
 	conn = RunService.Heartbeat:Connect(function(dt)
 		local currentTime = tick() - startTime
 		local currentPosition = ball.Position
@@ -281,7 +301,7 @@ local function throwBall(character: Model, hrp: BasePart, targetPos: Vector3, el
 			params.FilterType = Enum.RaycastFilterType.Exclude
 			params.IgnoreWater = true
 
-			local ignoreList : {Instance} = {}
+			local ignoreList: { Instance } = {}
 
 			-- Ignore NPCs
 			local npcsFolder = workspace:FindFirstChild("NPCs")
@@ -296,31 +316,31 @@ local function throwBall(character: Model, hrp: BasePart, targetPos: Vector3, el
 					table.insert(ignoreList, plr.Character)
 				end
 			end
-			
+
 			table.insert(ignoreList, ball)
 
 			params.FilterDescendantsInstances = ignoreList
 
 			-- Raycast down from a bit above the impact point
-			local rayOrigin    = position + Vector3.new(0, 5, 0)
+			local rayOrigin = position + Vector3.new(0, 5, 0)
 			local rayDirection = Vector3.new(0, -50, 0)
-			local downHit      = workspace:Raycast(rayOrigin, rayDirection, params)
+			local downHit = workspace:Raycast(rayOrigin, rayDirection, params)
 
 			-- Grab the downward normal (or fallback)
 			local surfPos, surfNormal
 			if downHit then
-				surfPos    = downHit.Position
+				surfPos = downHit.Position
 				surfNormal = downHit.Normal.Unit
 			else
-				surfPos    = position
+				surfPos = position
 				surfNormal = Vector3.yAxis
 			end
 
 			-- Two cases: walls vs. floors/slopes
 			if math.abs(surfNormal.Y) < 0.2 then
 				-- wall case: keep zone upright but face into the wall
-				local up      = Vector3.yAxis
-				local right   = up:Cross(surfNormal).Unit
+				local up = Vector3.yAxis
+				local right = up:Cross(surfNormal).Unit
 				local forward = surfNormal:Cross(up).Unit
 				return CFrame.fromMatrix(surfPos + up * 0.02, right, up, forward)
 			else
@@ -338,7 +358,7 @@ local function throwBall(character: Model, hrp: BasePart, targetPos: Vector3, el
 				forward = forward.Unit
 
 				local right = up:Cross(forward).Unit
-				forward    = right:Cross(up).Unit
+				forward = right:Cross(up).Unit
 
 				return CFrame.fromMatrix(surfPos + up * 0.02, right, up, forward)
 			end
@@ -350,7 +370,7 @@ local function throwBall(character: Model, hrp: BasePart, targetPos: Vector3, el
 
 		if distance > 0 then
 			local ignoreList = NPCs
-			
+
 			local castParams = RaycastParams.new()
 			castParams.FilterType = Enum.RaycastFilterType.Exclude
 			table.insert(ignoreList, ball)
@@ -366,39 +386,44 @@ local function throwBall(character: Model, hrp: BasePart, targetPos: Vector3, el
 			local result = workspace:Spherecast(lastPosition, radius, direction, castParams)
 
 			if result then
-    conn:Disconnect()
-    
-    -- Get surface information from collision
-    local surfacePosition = result.Position
-    local surfaceNormal = result.Normal
-    
-    -- Get travel direction (current velocity)
-    local travelDir = ball.AssemblyLinearVelocity.Unit
-    
-    -- Create properly aligned CFrame
-    local surfaceCFrame = getSurfaceAlignedCFrame(surfacePosition, surfaceNormal, ball)
-    
-    -- Apply rotation alignment
-    local placementCF = rotateToNegative90(surfaceCFrame)
-    placeZone(nil, placementCF, element, elementConfig, character)
-    ball:Destroy()
-    return
-end
+				conn:Disconnect()
+
+				-- Get surface information from collision
+				local surfacePosition = result.Position
+				local surfaceNormal = result.Normal
+
+				-- Get travel direction (current velocity)
+				local travelDir = ball.AssemblyLinearVelocity.Unit
+
+				-- Create properly aligned CFrame
+				local surfaceCFrame = getSurfaceAlignedCFrame(surfacePosition, surfaceNormal, ball)
+
+				-- Apply rotation alignment
+				local placementCF = rotateToNegative90(surfaceCFrame)
+				placeZone(nil, placementCF, element, elementConfig, character)
+				ball:Destroy()
+				return
+			end
 		end
 
 		lastPosition = currentPosition
 	end)
 end
 
-
 castRemote.OnServerEvent:Connect(function(player: Player, targetPos: Vector3)
 	local character: Model? = player.Character or player.CharacterAdded:Wait()
-	if not character then return end
+	if not character then
+		return
+	end
 
-	local config : Configuration? = character:FindFirstChild("Configuration") :: Configuration or character:WaitForChild("Configuration", 3) :: Configuration
-	if not config then return end
+	local config: Configuration? = character:FindFirstChild("Configuration") :: Configuration
+		or character:WaitForChild("Configuration", 3) :: Configuration
+	if not config then
+		return
+	end
 
-	local currentElement : StringValue = config:FindFirstChild("CurrentElement") :: StringValue or config:WaitForChild("CurrentElement", 3) :: StringValue
+	local currentElement: StringValue = config:FindFirstChild("CurrentElement") :: StringValue
+		or config:WaitForChild("CurrentElement", 3) :: StringValue
 	local elementName = currentElement.Value
 
 	local currentElementSettings = elementSettings[elementName]
@@ -420,29 +445,33 @@ castRemote.OnServerEvent:Connect(function(player: Player, targetPos: Vector3)
 	playerCooldowns[elementName] = now
 
 	local hrp: BasePart? = character:FindFirstChild("HumanoidRootPart") :: BasePart
-	if not hrp then return end
+	if not hrp then
+		return
+	end
 
 	local origin = hrp.Position
 	local displacement = targetPos - origin
 
-	if displacement.Magnitude > currentElementSettings.Range then return end 
+	if displacement.Magnitude > currentElementSettings.Range then
+		return
+	end
 
 	if currentElementSettings.Thrown then
 		throwBall(character, hrp, targetPos, elementName, currentElementSettings)
 	else
-		local ignoreList : {Instance} = NPCs
+		local ignoreList: { Instance } = NPCs
 		local rayOrigin = targetPos + Vector3.new(0, 10, 0)
 		local rayDirection = Vector3.new(0, -50, 0)
 		local params = RaycastParams.new()
 		params.FilterType = Enum.RaycastFilterType.Exclude
 		-- Exclude character and player parts to avoid hitting self
-		
+
 		for _, player in ipairs(Players:GetPlayers()) do
 			if player.Character then
 				table.insert(ignoreList, player.Character)
 			end
 		end
-		
+
 		params.FilterDescendantsInstances = ignoreList
 		local rayResult = workspace:Raycast(rayOrigin, rayDirection, params)
 

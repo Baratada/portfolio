@@ -1,6 +1,9 @@
 import React from "react";
 import Preview from "../components/Preview/Preview";
 
+const ClimbDescription =
+  "Using vector math and raycasts, I return the normal of the hit mesh's face and use the subsequent info in movement calculations. Works with smooth cylinders and round objects.\n(No animations yet)";
+
 const Scripts = () => (
   <div className="App">
     <h1 className="text-2xl font-bold text-center mt-5">Scripts</h1>
@@ -8,11 +11,16 @@ const Scripts = () => (
       These are some scripts I've made, feel free to look at the code!
     </p>
     <Preview
-      Name="Dungeon Generation Example"
+      Name="Procedural Dungeon Generation"
       Description="An extremely modular procedural dungeon generator, made using a grid/subgrid system to allow for all types of room sizes."
       Image="/DungeonGeneration.png"
       CodeName="DungeonGenerator"
       scriptFiles={["GenerateDungeon.lua", "DungeonGenerator.lua"]}
+    />
+    <Preview
+      Name="Advanced Climb Script"
+      Description={ClimbDescription}
+      Image="/ClimbClip.mp4"
     />
     <Preview
       Name="Elements Game"

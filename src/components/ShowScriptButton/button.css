@@ -1,0 +1,11 @@
+.primary-btn {
+  background-color: var(--color-dark-cyan-700);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  background-color: var(--color-dark-cyan-600);
+}

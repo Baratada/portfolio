@@ -26,18 +26,6 @@ const Animations = () => (
         className="w-[400px] h-auto rounded-md my-2"
         text={"Mode Awakening"}
       />
-      <Media
-        src={process.env.PUBLIC_URL + "/media/MimicryRun.mp4"}
-        alt="oopsie"
-        className="w-[400px] h-auto rounded-md my-2"
-        text={"Heavy Weapon Run"}
-      />
-      <Media
-        src={process.env.PUBLIC_URL + "/media/RunAnimation.mp4"}
-        alt="oopsie"
-        className="w-[400px] h-auto rounded-md my-2"
-        text={"Run"}
-      />
     </div>
   </div>
 );

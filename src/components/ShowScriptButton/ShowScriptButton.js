@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { motion, AnimatePresence } from "framer-motion";
+import "./button.css";
 
 const ShowScriptButton = ({ previewCodeFolderPath, scriptFiles }) => {
   const [code, setCode] = useState("");
@@ -44,7 +45,7 @@ const ShowScriptButton = ({ previewCodeFolderPath, scriptFiles }) => {
   return (
     <div className="mt-4">
       <button
-        className="px-4 py-2 bg-white/10 text-white rounded transition hover:bg-white/35"
+        className="px-4 py-2 rounded transition primary-btn"
         onClick={showCode}
       >
         Show Code

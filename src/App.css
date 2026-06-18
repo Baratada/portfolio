@@ -1,15 +1,29 @@
-:root{
---color-dark-cyan-50: #eff5f5;
---color-dark-cyan-100: #e0ebeb;
---color-dark-cyan-200: #c1d7d7;
---color-dark-cyan-300: #a2c3c3;
---color-dark-cyan-400: #83afaf;
---color-dark-cyan-500: #639c9c;
---color-dark-cyan-600: #507c7c;
---color-dark-cyan-700: #3c5d5d;
---color-dark-cyan-800: #283e3e;
---color-dark-cyan-900: #141f1f;
---color-dark-cyan-950: #0e1616;
+:root {
+  --color-dark-cyan-50: #0e1616;
+  --color-dark-cyan-100: #141f1f;
+  --color-dark-cyan-200: #283e3e;
+  --color-dark-cyan-300: #a2c3c3;
+  --color-dark-cyan-400: #83afaf;
+  --color-dark-cyan-500: #639c9c;
+  --color-dark-cyan-600: #507c7c;
+  --color-dark-cyan-700: #3c5d5d;
+  --color-dark-cyan-800: #eff5f5;
+  --color-dark-cyan-900: #e0ebeb;
+  --color-dark-cyan-950: #0e1616;
+}
+
+body {
+  background-color: var(--color-dark-cyan-50);
+  color: var(--color-dark-cyan-800);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.link {
+  color: var(--color-dark-cyan-400);
+}
+
+.link:hover{
+  color: var(--color-dark-cyan-300)
 }
 
 .App {

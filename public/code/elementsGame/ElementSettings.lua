@@ -8,10 +8,10 @@ export type ElementData = {
 	FlightTime: number?,
 	Sound: string,
 	Color: Color3,
-	Debris: boolean?
+	Debris: boolean?,
 }
 
-local elementSettings: {[string]: ElementData} = {
+local elementSettings: { [string]: ElementData } = {
 	Lightning = {
 		Range = 140,
 		Damage = 20,
@@ -19,7 +19,7 @@ local elementSettings: {[string]: ElementData} = {
 		Duration = 5,
 		Sound = "rbxassetid://4961240438",
 		Color = Color3.fromRGB(0, 200, 255),
-		Debris = true
+		Debris = true,
 	},
 	Poison = {
 		Range = 90,
@@ -30,7 +30,7 @@ local elementSettings: {[string]: ElementData} = {
 		Thrown = true,
 		FlightTime = 1,
 		Sound = "rbxassetid://5656490592",
-		Color = Color3.fromRGB(111, 255, 0)
+		Color = Color3.fromRGB(111, 255, 0),
 	},
 	Water = {
 		Range = 180,
@@ -42,7 +42,7 @@ local elementSettings: {[string]: ElementData} = {
 		FlightTime = 0.43,
 		Sound = "rbxassetid://142431247",
 		Color = Color3.fromRGB(0, 255, 225),
-		Debris = true
+		Debris = true,
 	},
 	Life = {
 		Range = 40,
@@ -53,7 +53,7 @@ local elementSettings: {[string]: ElementData} = {
 		Thrown = true,
 		FlightTime = 2,
 		Sound = "rbxassetid://122551013489891",
-		Color = Color3.fromRGB(234, 255, 0)
+		Color = Color3.fromRGB(234, 255, 0),
 	},
 }
 return elementSettings

@@ -4,8 +4,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Fusion = require(ReplicatedStorage.Modules.Fusion)
 local UserInputService = game:GetService("UserInputService")
 
-local player : Player? = Players.LocalPlayer
-if not player then return end
+local player: Player? = Players.LocalPlayer
+if not player then
+	return
+end
 
 local Value = Fusion.Value
 local Computed = Fusion.Computed
@@ -59,7 +61,7 @@ end)
 
 -- Per-frame update to tick cooldownTrigger (forces Computed reevaluation)
 game:GetService("RunService").RenderStepped:Connect(function()
-	cooldownTrigger:set(tick()) -- I'm new to fusion so I'm not usre if there's a better way for this.
+	cooldownTrigger:set(tick()) -- I'm new to fusion so I'm not sure if there's a better way for this.
 end)
 
 local currentCooldown = scope:Computed(function(use)
@@ -67,16 +69,17 @@ local currentCooldown = scope:Computed(function(use)
 	local elementName = use(currentElement)
 	local expiration = cooldownStore[elementName]
 
-	if not expiration then return "Ready" end
+	if not expiration then
+		return "Ready"
+	end
 
 	local remaining = expiration - tick()
 	return remaining > 0 and string.format("%.1f s", remaining) or "Ready"
 end)
 
-
 local currentColor = scope:Computed(function(use)
 	local settings = elementSettings[use(currentElement)]
-	return settings and settings.Color or Color3.fromRGB(255,255,255)
+	return settings and settings.Color or Color3.fromRGB(255, 255, 255)
 end)
 
 local tweenColor = scope:Spring(currentColor, 30, 3)
@@ -94,56 +97,60 @@ local function cycle(step: number)
 	cycleRem:FireServer(clientIndex)
 end
 
-local gui = scope:New "ScreenGui"{
+local gui = scope:New("ScreenGui")({
 	Name = "ElementCycler",
 	ResetOnSpawn = false,
 	Parent = player:WaitForChild("PlayerGui"),
 
 	[Children] = {
-		scope:New "Frame"{
+		scope:New("Frame")({
 			Name = "Container",
 			Position = UDim2.fromScale(0.025, 0.8),
-			Size = UDim2.fromScale(.2, .15),
+			Size = UDim2.fromScale(0.2, 0.15),
 			BackgroundColor3 = Color3.fromRGB(36, 36, 36),
 
 			[Children] = {
-				scope:New "TextLabel"{
+				scope:New("TextLabel")({
 					Name = "ElementName",
 					Font = Enum.Font.SourceSansBold,
 					Text = currentElement,
-					Size = UDim2.fromScale(1,.8),
-					Position = UDim2.fromScale(0,0),
+					Size = UDim2.fromScale(1, 0.8),
+					Position = UDim2.fromScale(0, 0),
 					TextScaled = true,
 					BackgroundTransparency = 1,
 					TextColor3 = scope:Computed(function(use)
 						return use(tweenColor)
-					end)
-				},
-				scope:New "TextLabel"{
+					end),
+				}),
+				scope:New("TextLabel")({
 					Name = "ElementCooldown",
 					Font = Enum.Font.SourceSansBold,
 					Text = currentCooldown,
-					Size = UDim2.fromScale(1,.4),
-					Position = UDim2.fromScale(0,.6),
+					Size = UDim2.fromScale(1, 0.4),
+					Position = UDim2.fromScale(0, 0.6),
 					TextScaled = true,
 					BackgroundTransparency = 1,
 					TextColor3 = scope:Computed(function(use)
 						return use(tweenColor)
-					end)
-				},
-				scope:New "UICorner"{
+					end),
+				}),
+				scope:New("UICorner")({
 					Name = "UICorner",
-					CornerRadius = UDim.new(0, 8)
-				}
-			}
-		}
-	}
-}
+					CornerRadius = UDim.new(0, 8),
+				}),
+			},
+		}),
+	},
+})
 
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
-	if gameProcessed then return end
+	if gameProcessed then
+		return
+	end
 
-	if lastCycle and tick() - lastCycle < 0.25 then return end
+	if lastCycle and tick() - lastCycle < 0.25 then
+		return
+	end
 
 	lastCycle = tick()
 

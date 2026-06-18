@@ -4,18 +4,26 @@ import Media from "../Media/Media";
 import ShowScriptButton from "../ShowScriptButton/ShowScriptButton";
 
 const Preview = ({ Name, Description, Image, CodeName, scriptFiles }) => (
-  <div className="flex flex-col items-center mb-4 bg-white/30 p-4 rounded-xl w-1/2 mx-auto border-t-4 border-b-4 border-white/30 shadow-[0_0_10px_#000]">
+  <div className="flex flex-col items-center mb-4 bg-white/5 p-4 rounded-xl w-1/2 mx-auto border-t-4 border-b-4 border-white/30 shadow-[0_0_10px_#000]">
     <h3 className="text-xl font-bold">{Name}</h3>
     <Media
       src={process.env.PUBLIC_URL + "/media/" + Image}
       alt={Name}
       className="w-64 h-auto rounded-md my-2"
     />
-    <p className="text-md font-semibold">{Description}</p>
-    <ShowScriptButton
-      previewCodeFolderPath={`${process.env.PUBLIC_URL}/code/${CodeName}`}
-      scriptFiles={scriptFiles}
-    />
+    <p className="text-md font-semibold" style={{ whiteSpace: "pre-line" }}>
+      {Description}
+    </p>
+    {CodeName && scriptFiles ? (
+      <ShowScriptButton
+        previewCodeFolderPath={`${process.env.PUBLIC_URL}/code/${CodeName}`}
+        scriptFiles={scriptFiles}
+      />
+    ) : (
+      <>
+        <p className="text-md font-semibold mt-5">Code Unavailable</p>
+      </>
+    )}
   </div>
 );
 

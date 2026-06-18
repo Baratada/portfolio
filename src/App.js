@@ -94,48 +94,29 @@ function App() {
     <Router>
       <div className="App w-screen min-h-screen bg-cover bg-fixed m-0 p-0 pb-24">
         {/* Navigation */}
-        <nav className="flex gap-4 pr-5 justify-end py-4 bg-white/20 shadow-md">
-          <Link
-            to="/"
-            className="text-white font-bold transition hover:text-purple-300 active:text-purple-300"
-          >
+        <nav className="flex gap-4 pr-5 justify-end py-4 bg-white/5 shadow-md">
+          <Link to="/" className="link">
             Home
           </Link>
-          <Link
-            to="/scripts"
-            className="text-white font-bold transition hover:text-purple-300 active:text-purple-300"
-          >
+          <Link to="/scripts" className="link">
             Scripts
           </Link>
-          <Link
-            to="/animations"
-            className="text-white font-bold transition hover:text-purple-300 active:text-purple-300"
-          >
+          <Link to="/animations" className="link">
             Animations
           </Link>
-          <Link
-            to="/projects"
-            className="text-white font-bold transition hover:text-purple-300 active:text-purple-300"
-          >
+          <Link to="/projects" className="link">
             Projects
           </Link>
-             <Link
-            to="/about"
-            className="text-white font-bold transition hover:text-purple-300 active:text-purple-300"
-          >
+          <Link to="/about" className="link">
             About
           </Link>
-          <a
-            href="https://github.com/baratada/Portfolio"
-            className="text-white font-bold transition hover:text-purple-300 active:text-purple-300"
-          >
+          <a href="https://github.com/baratada/Portfolio" className="link">
             Source
           </a>
         </nav>
 
         {/* Routes with animation */}
         <AnimatedRoutes />
-
       </div>
     </Router>
   );
