@@ -1,3 +1,20 @@
+:root{
+--color-dark-cyan-50: #eff5f5;
+--color-dark-cyan-100: #e0ebeb;
+--color-dark-cyan-200: #c1d7d7;
+--color-dark-cyan-300: #a2c3c3;
+--color-dark-cyan-400: #83afaf;
+--color-dark-cyan-500: #639c9c;
+--color-dark-cyan-600: #507c7c;
+--color-dark-cyan-700: #3c5d5d;
+--color-dark-cyan-800: #283e3e;
+--color-dark-cyan-900: #141f1f;
+--color-dark-cyan-950: #0e1616;
+}
+
 .App {
   text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
 }
